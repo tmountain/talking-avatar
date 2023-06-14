@@ -14,6 +14,8 @@ import {
     bodyMap
 } from "react-native-bigheads"
 
+// code is adapted from this article
+// https://alexstreza.hashnode.dev/generate-random-avatars-in-react
 function selectRandomKey(object: { [key: string]: any }) {
     return Object.keys(object)[
         Math.floor(Math.random() * Object.keys(object).length)
