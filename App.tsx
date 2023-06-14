@@ -3,6 +3,7 @@ import { TextInput, View, Button } from 'react-native';
 import AnimatedBigHead from './AnimatedBigHead'; // Import the AnimatedBigHead component
 import AudioPlayer from './AudioPlayer'; // Import the AudioPlayer component
 import { handlePlayAudio } from './audioUtils';
+import { Viseme, PlaybackCallbackRef } from './Types';
 
 
 // https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html
@@ -12,16 +13,15 @@ How are you today?
 </speak>
 `
 
-
 // Main component
 
 export default function App() {
-  const [audioUri, setAudioUri] = useState(null);
-  const playbackCallback = useRef(null);
+  const [audioUri, setAudioUri] = useState("");
+  const playbackCallback = useRef<PlaybackCallbackRef>(null);
   const [isPlaying, setPlaying] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [currentVisemeIndex, setCurrentVisemeIndex] = useState(0);
-  const [visemeData, setVisemeData] = useState([]);
+  const [visemeData, setVisemeData] = useState<Viseme[]>([]);
   const [ssml, setSsml] = useState(defaultSSML);
 
   const handlePlayAudioWrapper = () => {

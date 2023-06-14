@@ -5,8 +5,8 @@ import { Audio } from 'expo-av';
 // updates its playback status. This is useful for updating the UI when the
 // audio player starts or stops playing.
 // See this example for context: https://docs.expo.dev/versions/latest/sdk/av/#example-setonplaybackstatusupdate
-const AudioPlayer = ({ audioUri, playbackCallback }) => {
-  const [sound, setSound] = useState(null);
+const AudioPlayer = ({ audioUri, playbackCallback }: { audioUri: string; playbackCallback: any }) => {
+  const [sound, setSound] = useState(new Audio.Sound());
 
   useEffect(() => {
     const initAudio = async () => {
