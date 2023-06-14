@@ -4,6 +4,7 @@ import AnimatedBigHead from './AnimatedBigHead'; // Import the AnimatedBigHead c
 import AudioPlayer from './AudioPlayer'; // Import the AudioPlayer component
 import { handlePlayAudio } from './audioUtils';
 import { Viseme, PlaybackCallbackRef } from './Types';
+import { BigHeadConfiguration, getRandomBigHeadConfiguration } from './bigHeadConfiguration';
 
 
 // https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html
@@ -13,9 +14,13 @@ How are you today?
 </speak>
 `
 
+const bigHeadName = 'random';
+const bigHeadConfig = BigHeadConfiguration[bigHeadName] || getRandomBigHeadConfiguration();
+
 // Main component
 
 export default function App() {
+  const [voice, setVoice] = useState('Joey');
   const [audioUri, setAudioUri] = useState("");
   const playbackCallback = useRef<PlaybackCallbackRef>(null);
   const [isPlaying, setPlaying] = useState(false);
@@ -27,6 +32,8 @@ export default function App() {
   const handlePlayAudioWrapper = () => {
     handlePlayAudio(
       ssml,
+      voice,
+      setVoice,
       setVisemeData,
       setAudioUri,
       isPlaying,
@@ -39,7 +46,7 @@ export default function App() {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <AnimatedBigHead currentVisemeIndex={currentVisemeIndex} visemeData={visemeData} />
+      <AnimatedBigHead currentVisemeIndex={currentVisemeIndex} visemeData={visemeData} bigHeadConfig={bigHeadConfig} />
       <AudioPlayer audioUri={audioUri} playbackCallback={playbackCallback} />
       <Button title="Play Audio" onPress={handlePlayAudioWrapper} disabled={isLoading} />
       <TextInput

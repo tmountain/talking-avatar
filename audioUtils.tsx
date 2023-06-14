@@ -5,12 +5,9 @@ import { Viseme, PlaybackCallbackRef, PlaybackStatusUpdate } from './Types';
 // FIXME: load this from an env var
 const svcURL = 'http://localhost:3000';
 
-// FIXME: load this from the UI
-const voice = 'Joey';
-
 // Helper functions
 
-async function fetchVisemeData(ssml: string): Promise<Viseme[]> {
+async function fetchVisemeData(ssml: string, voice: string): Promise<Viseme[]> {
   try {
     const response: AxiosResponse<Viseme[]> = await axios.post(`${svcURL}/visemes`, {
       ssml: ssml,
@@ -25,7 +22,7 @@ async function fetchVisemeData(ssml: string): Promise<Viseme[]> {
 }
 
 // Fetch the audio data from the backend
-async function fetchAudioData(ssml: string): Promise<string> {
+async function fetchAudioData(ssml: string, voice: string): Promise<string> {
   try {
     const response: AxiosResponse = await axios.post(`${svcURL}/speech`, {
       ssml: ssml,
@@ -59,6 +56,8 @@ function animateVisemes(visemeData: Viseme[], setCurrentVisemeIndex: (index: num
 
 export async function handlePlayAudio(
   ssml: string,
+  voice: string,
+  setVoice: React.Dispatch<React.SetStateAction<string>>,
   setVisemeData: React.Dispatch<React.SetStateAction<Viseme[]>>,
   setAudioUri: React.Dispatch<React.SetStateAction<string>>,
   isPlaying: boolean,
@@ -70,9 +69,9 @@ export async function handlePlayAudio(
   setLoading(true);
 
   try {
-    const visemeData = await fetchVisemeData(ssml);
+    const visemeData = await fetchVisemeData(ssml, voice);
     setVisemeData(visemeData);
-    const audioUri = await fetchAudioData(ssml);
+    const audioUri = await fetchAudioData(ssml, voice);
 
     const onPlaybackStatusUpdate: PlaybackStatusUpdate = (status: AVPlaybackStatus) => {
       const avStatus = status as AVPlaybackStatusSuccess;
